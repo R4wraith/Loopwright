@@ -245,10 +245,6 @@ trellis/
 └── docs/img/                   # diagrams (architecture · loop · workflow)
 ```
 
-## Acknowledgements
-
-Standing on good ideas from others: **Andrej Karpathy** (the coding-agent failure modes the rules counter), **Tetragon** (the kind of mature tool the harness wraps rather than rebuilds), **claude-mem** (the episodic-memory layer), and Anthropic's **skill-creator** conventions.
-
 ## License
 
 [MIT](LICENSE)
