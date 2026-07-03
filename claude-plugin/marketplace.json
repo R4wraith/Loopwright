@@ -1,0 +1,15 @@
+{
+  "name": "trellis-marketplace",
+  "owner": {
+    "name": "<owner>"
+  },
+  "description": "Self-hosted marketplace for the Trellis plugin (personal/team distribution — sandbox to marketplace path).",
+  "plugins": [
+    {
+      "name": "trellis",
+      "source": ".",
+      "description": "Scaffold a drop-in .claude/ autonomous build harness — a PM-orchestrated Claude Code setup with a goal + persistent loop, a tailored specialist-subagent roster, deterministic safety hooks, and pre-seeded build state.",
+      "version": "2.0.0"
+    }
+  ]
+}
