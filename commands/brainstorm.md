@@ -9,8 +9,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 This command runs a disciplined, principled interview to craft `idea.md` — the **foundation
 contract** the whole Trellis loop grows on. A great `idea.md` makes the generated harness sing; a
 vague one produces a vague harness, so this is worth doing properly before any scaffolding
-happens. The interview adapts `superpowers:brainstorming`'s meta-rules but grounds every
-recommendation in Trellis's own `CLAUDE.md` principles, so the defaults teach good architecture as
+happens. The interview grounds every recommendation in Trellis's own `CLAUDE.md` principles, so the defaults teach good architecture as
 you go. This command **writes `idea.md` and hands off to `/trellis:new` — it does not scaffold**
 anything itself; the human owns the seam between "design the idea" and "build the harness."
 
