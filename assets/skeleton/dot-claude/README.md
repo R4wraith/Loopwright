@@ -18,7 +18,7 @@ claude
 
 ## Notes
 - Confirm the language in `DECISIONS.md` (D2) before the keystone is generated.
-- Subagents use `model: inherit`; pin tiers per-agent (`opus`/`sonnet`/`haiku`) if you want.
+- Spine subagents ship with per-role model routing already pinned in frontmatter — `reviewer`/`performance-engineer`: `opus` (adversarial judgment); `test-engineer`/`integrator`: `sonnet` (execution); `release-manager`: `haiku` (git mechanics). Component-owners default to `sonnet`, except a keystone `-architect` owner, which is `opus`. See CLAUDE.md's "Model routing" section to adjust.
 - The **product source code** you build lives at the **project root**; `.claude/` stays config + journal.
 
 ## What's inside

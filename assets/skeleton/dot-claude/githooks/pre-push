@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+cd "$root" || { echo "cannot resolve project root" >&2; exit 1; }
 set -uo pipefail
+echo "[pre-push] note: this is a best-effort backstop — 'git push --no-verify' skips it entirely."
 echo "[pre-push] tests + check"
 bash .claude/scripts/run-tests.sh || { echo "tests failed — push blocked"; exit 1; }
 bash .claude/scripts/check.sh      || { echo "check failed — push blocked"; exit 1; }

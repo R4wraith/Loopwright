@@ -1,0 +1,78 @@
+# Pinned, offline semgrep ruleset (SP3/F14). Referenced by `.claude/scripts/check.sh`'s full
+# mode as `semgrep --config .claude/semgrep.yml .` — never the network-fetching "auto" config
+# value (that fetches rules over the network on every run, the single worst hot-path cost the
+# SP3 spec calls out).
+#
+# This is a deliberately minimal starter: a handful of high-signal, low-noise checks across
+# the languages the harness scaffolds for. Full ruleset curation is out of scope for SP3 and
+# coordinates with SP2 (AppSec gate) / SP6 (hardening) later — extend this file, don't go back
+# to the network-fetching config mode.
+rules:
+  - id: generic-hardcoded-secret-assignment
+    languages: [generic]
+    severity: WARNING
+    message: >-
+      Possible hardcoded secret assignment (api key / token / password / secret literal).
+      Move to environment variables or a secrets manager.
+    patterns:
+      - pattern-regex: '(?i)(api[_-]?key|secret|token|password)\s*[:=]\s*["''][A-Za-z0-9_\-]{12,}["'']'
+
+  - id: js-eval-use
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      `eval()` executes a string as code — a common injection vector. Avoid it; if a dynamic
+      dispatch is truly needed, use an explicit allowlist/lookup table instead.
+    patterns:
+      - pattern: eval(...)
+
+  - id: js-child-process-exec-string-concat
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      Shell command built via string concatenation/interpolation passed to exec/execSync —
+      injection risk if any part is user-controlled. Prefer execFile/spawn with an argument
+      array, or validate/allowlist the input.
+    patterns:
+      - pattern-either:
+          - pattern: child_process.exec("..." + ...)
+          - pattern: exec("..." + ...)
+    paths:
+      exclude:
+        - "**/*.test.*"
+        - "**/*.spec.*"
+
+  - id: py-eval-exec-use
+    languages: [python]
+    severity: ERROR
+    message: >-
+      `eval`/`exec` on dynamic input is a common injection vector. Avoid it, or restrict to a
+      hardcoded, non-user-controlled literal.
+    patterns:
+      - pattern-either:
+          - pattern: eval(...)
+          - pattern: exec(...)
+
+  - id: py-subprocess-shell-true
+    languages: [python]
+    severity: ERROR
+    message: >-
+      `subprocess.*(..., shell=True)` with any non-literal argument is a command-injection
+      risk. Pass a list of args with `shell=False` (the default) instead.
+    patterns:
+      - pattern-either:
+          - pattern: subprocess.run(..., shell=True, ...)
+          - pattern: subprocess.call(..., shell=True, ...)
+          - pattern: subprocess.Popen(..., shell=True, ...)
+
+  - id: rust-unwrap-on-untrusted-parse
+    languages: [rust]
+    severity: WARNING
+    message: >-
+      `.unwrap()`/`.expect()` immediately after parsing external input will panic on
+      malformed/adversarial input instead of failing closed. Handle the `Result`/`Option`
+      explicitly.
+    patterns:
+      - pattern-either:
+          - pattern: $X.parse().unwrap()
+          - pattern: $X.parse().expect(...)

@@ -47,3 +47,18 @@ Order them so each stands on finished ground. Give each a checkable success crit
 
 ## Scope for v1
 What "first working version" includes — the smallest thing that proves the core works end to end.
+
+## Success criteria (the finish line)
+Objective, checkable conditions that mean the project is **done** — these seed `GOAL.md`'s finish line
+(the loop's terminal-success condition, distinct from the budget backstop). Verifiable, not vibes.
+- …
+
+## Skills to leverage
+Claude Code skills the build should invoke for specific work, each with a one-line *why*. `/trellis:new`
+propagates these into the generated harness (a CLAUDE.md note + a DECISIONS entry).
+- …
+
+## MCP servers
+MCP servers to wrap for hard/solved parts, each with a one-line *why* (wrap > build). Wiring is confirmed
+by the human in `settings.json`/`.mcp.json` — never auto-enabled.
+- …

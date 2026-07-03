@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+cd "$root" || { echo "cannot resolve project root" >&2; exit 1; }
 set -uo pipefail
 added="$(git diff --cached -U0 | grep -E '^\+' | sed 's/^\+//')"
 if [ -n "$added" ] && printf '%s\n' "$added" | grep -EnH -f .claude/hooks/secret-patterns.txt - >&2; then

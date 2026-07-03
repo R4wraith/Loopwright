@@ -12,3 +12,9 @@
 
 ## Build order
 {{BUILD_ORDER}}
+
+## Backlog (speculative)
+
+_SP5: larger architectural directions proposed by a `/dream` Phase 2 brainstorm land here, each
+tagged `[dream/speculative]`. Candidates only — never a build-order commitment until a human or the
+loop's orient step promotes one in. Empty until the first `/dream` run._

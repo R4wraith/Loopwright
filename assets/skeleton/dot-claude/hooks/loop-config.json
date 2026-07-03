@@ -1,0 +1,8 @@
+{
+  "_comment": "SP4 bounded-autonomy budget ceilings — CONSERVATIVE placeholders (see docs/superpowers/specs/2026-07-01-trellis-v2-sp4-liveness-design.md O3). Ground these from SP6's baseline.md once real shifts are measured; ship conservative until then. This is the single documented place for the numbers — loop-state.mjs reads it, falling back to the same values if the file is missing/unreadable.",
+  "max_iterations": 40,
+  "max_wall_clock_sec": 21600,
+  "milestone_iter_soft": 12,
+  "idle_gap_cap_sec": 600,
+  "_idle_gap_cap_sec_comment": "SP7/F7 — max_wall_clock_sec is now compared against ACCUMULATED ACTIVE seconds, not calendar time since started_at. Each Stop adds min(now - last heartbeat, idle_gap_cap_sec) to loop.json's active_seconds; a gap longer than this (e.g. a milestone-review pause waiting on a human) counts as idle, not active, so it no longer silently burns the wall-clock ceiling (the Lumen run hit 209% of its 6h ceiling with zero effect because ~13h of that was idle)."
+}
