@@ -23,7 +23,7 @@ Create `agents/<name>.md` for each component:
 name: {{COMPONENT_NAME}}
 description: Owns {{WHAT_IT_OWNS}}. Use for {{WHEN_TO_USE}}.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash
-model: inherit
+model: sonnet
 ---
 You own {{WHAT_IT_OWNS}}.
 - {{KEY_RESPONSIBILITY_1}}
@@ -37,6 +37,8 @@ Guidance for filling it:
 - The **keystone owner** is special — mark it `-architect`, and its brief should stress: small, versioned, validated, codegen-friendly, the thing everything binds to.
 - Give each component-owner a **clear boundary** so two agents don't fight over the same files.
 - If a component parses external/untrusted input, say so explicitly — it changes how it's written and tested.
+- **Model routing (SP3):** the template default is `model: sonnet` — routine component-owners execute non-keystone code; risk is caught at verify (the opus `reviewer`), not by the owner's own model. Set `model: opus` on the keystone `-architect` owner (it owns the contract everything binds to) and on any owner of a component that parses untrusted input or holds a keystone-level contract. Don't set every component-owner to opus — that's the "Opus everywhere" posture this template deliberately avoids.
+- **Codemap ownership (SP-mem, Tier 2):** each component-owner keeps `.claude/CODEMAP.md` current for the module(s) it owns — the scaffolder seeds the Modules table from `DESIGN.md`'s components at materialize time; the owner updates its rows (contracts, `depends on`/`callers` edges) at the loop's Record step whenever its module's boundary or public contract changes.
 
 ## Example (from the AgentBox project)
 Spine (all five) + four component-owners:
