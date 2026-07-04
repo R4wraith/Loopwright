@@ -1,16 +1,17 @@
 ---
-description: Craft a SOTA idea.md for a project via a principled brainstorming interview, then hand off to /trellis:new.
+description: Craft a SOTA idea.md for a project via a principled brainstorming interview, then hand off to /loopwright:new.
 argument-hint: "(optional: a one-line idea to start from)"
 allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
-# /trellis:brainstorm
+# /loopwright:brainstorm
 
 This command runs a disciplined, principled interview to craft `idea.md` — the **foundation
-contract** the whole Trellis loop grows on. A great `idea.md` makes the generated harness sing; a
+contract** the whole Loopwright loop grows on. A great `idea.md` makes the generated harness sing; a
 vague one produces a vague harness, so this is worth doing properly before any scaffolding
-happens. The interview grounds every recommendation in Trellis's own `CLAUDE.md` principles, so the defaults teach good architecture as
-you go. This command **writes `idea.md` and hands off to `/trellis:new` — it does not scaffold**
+happens. The interview adapts `superpowers:brainstorming`'s meta-rules but grounds every
+recommendation in Loopwright's own `CLAUDE.md` principles, so the defaults teach good architecture as
+you go. This command **writes `idea.md` and hands off to `/loopwright:new` — it does not scaffold**
 anything itself; the human owns the seam between "design the idea" and "build the harness."
 
 `$ARGUMENTS`, if given, is a one-line idea to start from — treat it as the answer to Interview flow
@@ -29,10 +30,10 @@ step 1 and skip re-asking it.
 - **YAGNI.** Keep questions scoped to what's needed to write a good `idea.md` — don't interrogate
   for detail the build doesn't need yet.
 - Prefer a structured `AskUserQuestion` call wherever the answer space is enumerable (mirrors
-  `/trellis:new`'s own interview-tool preference); keep genuinely open-ended items as free prose.
+  `/loopwright:new`'s own interview-tool preference); keep genuinely open-ended items as free prose.
   If `AskUserQuestion` isn't available in this environment, fall back to the same questions as
   plain prose — either path collects the same answers, only the presentation differs.
-- Interview guidance + what good answers look like: `references/blueprint.md`. `/trellis:new`
+- Interview guidance + what good answers look like: `references/blueprint.md`. `/loopwright:new`
   reads the same file for its own intake, so this command's interview stays in sync with it as it
   evolves.
 
@@ -57,7 +58,7 @@ principle noted:
 5. **The keystone.** Offer 2–3 candidate keystones inferred from the idea so far (the central data
    model, schema, protocol, or abstraction everything else binds to) and recommend the one with the
    **widest blast radius** — the thing whose change would force the most rework. This is the most
-   important question in the interview: **keystone-first** is how Trellis avoids sprawl, so get it
+   important question in the interview: **keystone-first** is how Loopwright avoids sprawl, so get it
    right before anything else is decided.
 6. **Wrap vs. build.** For the hard/solved parts, propose mature tools or libraries to lean on.
    Recommend **wrap > build**: reuse infrastructure so effort goes into what's actually the
@@ -103,13 +104,13 @@ Code skills and the configured MCP servers (check the environment/tool listing a
    and `## MCP servers` sections.
 
 If enumeration isn't possible in this environment, **fall back to asking** the user to name the
-skills/MCP servers they want considered, in prose — the same fallback `/trellis:new` uses for its
+skills/MCP servers they want considered, in prose — the same fallback `/loopwright:new` uses for its
 own AskUserQuestion-vs-prose split.
 
 MCP servers are a research-and-recommend input only: this command **never wires** anything into
 `settings.json`/`.mcp.json` itself. Wiring a real MCP server is consequential (it grants a whole
 integration surface), so it's always flagged for the human to confirm — here, and again by
-`/trellis:new` when it propagates these into the harness.
+`/loopwright:new` when it propagates these into the harness.
 
 ## Output & handoff
 
@@ -122,8 +123,8 @@ written `idea.md` — a vague `idea.md` produces a vague harness.
 
 When `idea.md` is written, tell the user:
 
-> **idea.md is ready — run `/trellis:new` to scaffold, then `/start`.**
+> **idea.md is ready — run `/loopwright:new` to scaffold, then `/start`.**
 
-This command stops there. It explicitly **does not run or scaffold** `/trellis:new` itself, and it
+This command stops there. It explicitly **does not run or scaffold** `/loopwright:new` itself, and it
 does not auto-wire any MCP server — both are deliberate handoffs the human drives, one command at a
-time: `/trellis:brainstorm` (craft `idea.md`) → `/trellis:new` (scaffold) → `/start` (build).
+time: `/loopwright:brainstorm` (craft `idea.md`) → `/loopwright:new` (scaffold) → `/start` (build).

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
   <rect x="0" y="0" width="880" height="560" fill="#ffffff"/>
 
-  <text x="440" y="38" text-anchor="middle" font-size="24" font-weight="700" fill="#111827">Trellis — one drop-in <tspan font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#4f46e5">.claude/</tspan> folder</text>
+  <text x="440" y="38" text-anchor="middle" font-size="24" font-weight="700" fill="#111827">Loopwright — one drop-in <tspan font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#4f46e5">.claude/</tspan> folder</text>
   <text x="440" y="64" text-anchor="middle" font-size="14" fill="#6b7280">Drag it into any project. Claude Code loads it automatically — no setup files scattered around.</text>
 
   <!-- project container -->

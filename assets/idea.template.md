@@ -1,7 +1,7 @@
 # idea.md — <Project name>
 
 > High-level design. Write this on a clean planning session (Opus 4.8) *before any code*.
-> Trellis reads this to scaffold the build harness, so be concrete — especially the keystone and milestones.
+> Loopwright reads this to scaffold the build harness, so be concrete — especially the keystone and milestones.
 
 ## What it is
 One sentence: what this does and for whom.
@@ -23,7 +23,7 @@ What the user gets and how they interact with it (CLI? web UI? API? file?). What
 The core logic / flow, in a few lines. Don't design the code — describe the moving parts and how data flows.
 
 ## The keystone
-The one thing everything else depends on — the central data model, schema, protocol, or abstraction. (If unsure, name the thing whose change would force the most rework. Trellis builds this first.)
+The one thing everything else depends on — the central data model, schema, protocol, or abstraction. (If unsure, name the thing whose change would force the most rework. Loopwright builds this first.)
 
 ## What to wrap (don't rebuild)
 Mature tools/libraries to lean on for the hard parts, so effort goes into what's actually yours.
@@ -35,7 +35,7 @@ Tone / UX qualities that matter (fast, minimal, playful, rock-solid, …). What 
 What this explicitly will **not** do — and what's deferred to "later" rather than v1.
 
 ## Stack (if you have a preference)
-Language / framework, and why. (Leave blank to let Trellis propose one. Lean memory-safe where it parses untrusted input.)
+Language / framework, and why. (Leave blank to let Loopwright propose one. Lean memory-safe where it parses untrusted input.)
 
 ## Milestones
 Order them so each stands on finished ground. Give each a checkable success criterion.
@@ -54,7 +54,7 @@ Objective, checkable conditions that mean the project is **done** — these seed
 - …
 
 ## Skills to leverage
-Claude Code skills the build should invoke for specific work, each with a one-line *why*. `/trellis:new`
+Claude Code skills the build should invoke for specific work, each with a one-line *why*. `/loopwright:new`
 propagates these into the generated harness (a CLAUDE.md note + a DECISIONS entry).
 - …
 

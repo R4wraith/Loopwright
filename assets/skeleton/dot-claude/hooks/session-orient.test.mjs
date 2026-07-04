@@ -42,9 +42,9 @@ function runHook({ stateMd, findingsMd, loopJson, stdin }) {
     encoding: 'utf8',
     env: {
       ...process.env,
-      TRELLIS_STATE_MD: stateMdPath,
-      TRELLIS_FINDINGS_MD: findingsMdPath,
-      TRELLIS_LOOP_JSON: loopJsonPath,
+      LOOPWRIGHT_STATE_MD: stateMdPath,
+      LOOPWRIGHT_FINDINGS_MD: findingsMdPath,
+      LOOPWRIGHT_LOOP_JSON: loopJsonPath,
     },
   });
   rmSync(dir, { recursive: true, force: true });

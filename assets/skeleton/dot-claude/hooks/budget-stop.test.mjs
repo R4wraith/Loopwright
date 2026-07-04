@@ -27,8 +27,8 @@ function runHook({ loopJson, stateMd, stdin = '{}' } = {}) {
     encoding: 'utf8',
     env: {
       ...process.env,
-      TRELLIS_LOOP_JSON: loopJsonPath,
-      TRELLIS_STATE_MD: stateMdPath,
+      LOOPWRIGHT_LOOP_JSON: loopJsonPath,
+      LOOPWRIGHT_STATE_MD: stateMdPath,
     },
   });
   let finalState = null;
@@ -211,11 +211,11 @@ test('active-time budget: accumulated active_seconds (not calendar started_at) d
   assert.ok(finalState.active_seconds >= 50 && finalState.active_seconds <= 53, `expected ~51-52, got ${finalState.active_seconds}`);
 });
 
-test('active-time budget: an idle gap beyond the cap only adds the cap, does NOT itself exhaust (Lumen 209%-of-ceiling regression)', () => {
+test('active-time budget: an idle gap beyond the cap only adds the cap, does NOT itself exhaust (209%-of-ceiling regression)', () => {
   const now = Math.floor(Date.now() / 1000);
   const loopJson = {
     iteration: 1,
-    started_at: now - 46800, // 13h ago (209% of a 6h ceiling) — mostly idle, like the Lumen run
+    started_at: now - 46800, // 13h ago (209% of a 6h ceiling) — mostly idle, like a prior real run
     heartbeat_at: now - 30, // but the last real heartbeat was recent
     last_commit_sha: null,
     milestone_gate: 'clear', milestone_ticked_count: 0, approval_token: null,

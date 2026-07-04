@@ -269,7 +269,7 @@ test('accumulateActiveSeconds: two Stops within the idle-gap cap add the real ga
   assert.equal(s0.active_seconds, 0, 'input not mutated');
 });
 
-test('accumulateActiveSeconds: a gap beyond the idle-gap cap only adds the cap (Lumen 209%-of-ceiling bug)', () => {
+test('accumulateActiveSeconds: a gap beyond the idle-gap cap only adds the cap (209%-of-ceiling bug)', () => {
   const s0 = { ...freshState(1000, DEFAULT_CONFIG), heartbeat_at: 1000, active_seconds: 40 };
   // "3 hours since the last Stop" (10800s) — idle, not active; only the 600s cap counts.
   const s1 = accumulateActiveSeconds(s0, 1000 + 10800, 600);

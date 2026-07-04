@@ -2,7 +2,7 @@
 # GUI smoke-shot TEMPLATE (SP7/F8) — a project fills in the TODOs below; the harness never
 # runs this unmodified. Unit tests + a green `check.sh`/`run-tests.sh` verify LOGIC, not
 # what actually renders — they miss the class of bug where the component behaves correctly
-# but ships visually broken (the Lumen build shipped exactly this: a Settings panel with no
+# but ships visually broken (a prior real build shipped exactly this: a Settings panel with no
 # CSS class applied, so it rendered as unstyled/overlapping HTML while every unit test and
 # code review passed clean). A screenshot + a couple of cheap layout-invariant assertions
 # catches that class of regression that logic-only verification structurally cannot.

@@ -1,10 +1,10 @@
 ---
-description: Scaffold a new Trellis .claude/ harness for a project (explicit entry point for Step 1–5).
+description: Scaffold a new Loopwright .claude/ harness for a project (explicit entry point for Step 1–5).
 argument-hint: "(optional: target project directory, default is the current directory)"
 allowed-tools: Read, Write, Edit, Bash(mkdir:*), Bash(chmod:*), Bash(grep:*), AskUserQuestion
 ---
 
-# /trellis:new
+# /loopwright:new
 
 This is the **explicit** entry point for the skill's own scaffold process — the same Step 1–5
 the skill runs when a user just describes their idea in prose (see the root `SKILL.md`), but
@@ -86,7 +86,7 @@ there, run `/start`. Remind them to confirm the language in `DECISIONS.md` (D2) 
 keystone code is generated.
 
 ---
-**Namespace note:** this command (`/trellis:new`) and `/trellis:upgrade` are the plugin's *own*
+**Namespace note:** this command (`/loopwright:new`) and `/loopwright:upgrade` are the plugin's *own*
 operation — they live in this plugin-root `commands/` folder. They are unrelated to (and never
 collide with) the *generated* project's own un-namespaced `/start`, `/goal`, `/loop`, `/status`,
 `/dream`, which ship inside `assets/skeleton/dot-claude/commands/` and are copied into the

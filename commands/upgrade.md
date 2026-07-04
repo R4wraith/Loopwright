@@ -4,10 +4,10 @@ argument-hint: "(optional: target project directory, default is the current dire
 allowed-tools: Read, Bash(diff:*), Bash(grep:*), AskUserQuestion
 ---
 
-# /trellis:upgrade
+# /loopwright:upgrade
 
 Run this **inside a target project** that already has a deployed `.claude/` from an earlier
-Trellis scaffold. It closes audit finding **F26**: a deployed harness can (a) tell it's stale by
+Loopwright scaffold. It closes audit finding **F26**: a deployed harness can (a) tell it's stale by
 reading its own version stamp, and (b) get an explicit, reviewable upgrade path instead of silent
 drift or a blind re-scaffold.
 
@@ -24,19 +24,19 @@ ledger files — these are append-only project history, not scaffolding output �
 GOAL.md  STATE.md  PROGRESS.md  DECISIONS.md  FINDINGS.md  LEARNINGS.md  CODEMAP.md  CLAUDE.md
 ```
 
-`CLAUDE.md` is protected from overwrite for two reasons: (1) `/trellis:new` fills it with
+`CLAUDE.md` is protected from overwrite for two reasons: (1) `/loopwright:new` fills it with
 project-specific, non-`{{PLACEHOLDER}}` content (`{{PROJECT_NAME}}`, `{{ONE_LINE}}`, tailored
 principles wording) that a raw skeleton copy would clobber, reintroducing raw `{{...}}` tokens or
 erasing the user's tailoring; and (2) it carries the `Harness-Version:` stamp this very command
 reads to decide staleness — never something this command diffs or writes. The **only** thing
-`/trellis:upgrade` ever does with `CLAUDE.md` is *read* its `Harness-Version:` line (step 1 below).
+`/loopwright:upgrade` ever does with `CLAUDE.md` is *read* its `Harness-Version:` line (step 1 below).
 It is never diffed against the skeleton and never offered for whole-file accept/reject, even if
 the constitution prose changed between versions — see step 4a for what happens instead.
 
 Also excluded from the diff: `DESIGN.md`, `GOAL.md` (already listed above), any component-owner
 agent file (`agents/<name>.md` that isn't one of the seven spine agents), and any file whose
 content still contains a filled-in (non-`{{PLACEHOLDER}}`) project-specific value — these were
-*tailored* for this project by `/trellis:new`, not shipped verbatim, so a fresh skeleton copy is
+*tailored* for this project by `/loopwright:new`, not shipped verbatim, so a fresh skeleton copy is
 never the right answer for them.
 
 Only **mechanism** files — the truly verbatim set from `SKILL.md`'s Step 4 — are ever diffed or
@@ -51,11 +51,11 @@ and never overwritten by this command; it is read-version-only.
 1. **Read the target's stamp.** Read `<target>/.claude/CLAUDE.md` and extract *only* the
    `Harness-Version:` line (the SP1 drift anchor). Do not treat any other part of this read as
    diffable content — this is a version-stamp read, not a preview of a future overwrite. If the
-   file or the line is missing, tell the user this doesn't look like a Trellis-scaffolded
+   file or the line is missing, tell the user this doesn't look like a Loopwright-scaffolded
    `.claude/` and stop.
 2. **Read the plugin's current stamp.** Read
    `${CLAUDE_PLUGIN_ROOT}/assets/skeleton/dot-claude/CLAUDE.md` and extract its own
-   `Harness-Version:` line — this is what a fresh `/trellis:new` would stamp today. Again, this is
+   `Harness-Version:` line — this is what a fresh `/loopwright:new` would stamp today. Again, this is
    a version-stamp read only; the skeleton's `CLAUDE.md` body is never proposed as a replacement
    for the target's tailored `CLAUDE.md`.
 3. **Compare.**
@@ -80,7 +80,7 @@ and never overwritten by this command; it is read-version-only.
    `CLAUDE.md` at their own discretion; this command will not touch the file.
 5. **Ask, don't auto-apply.** For each *mechanism* file with a real diff, ask the user (via
    `AskUserQuestion` where available; otherwise ask in plain prose — same fallback note as
-   `/trellis:new`) whether to accept the plugin's current version for that file. Apply only the
+   `/loopwright:new`) whether to accept the plugin's current version for that file. Apply only the
    files the user explicitly accepts. Never batch-apply without per-file confirmation, and never
    touch a file outside the mechanism set — including `CLAUDE.md` — even if the user says "just
    update everything."
@@ -92,6 +92,6 @@ and never overwritten by this command; it is read-version-only.
 
 ---
 **Namespace note:** see `commands/new.md` for why this command's own namespacing
-(`/trellis:upgrade`) never collides with the target project's un-namespaced `/start`/`/goal`/
+(`/loopwright:upgrade`) never collides with the target project's un-namespaced `/start`/`/goal`/
 `/loop`/`/status`/`/dream` commands, which are plain files in the *target* project's
 `.claude/commands/`, not plugin components.

@@ -3,8 +3,8 @@
 //
 // Fail-closed skeleton: any parse error, exception, unreadable input, or missing
 // pattern file => deny (exit 2). A genuinely empty command => exit 0 (nothing to guard).
-// This is a best-effort backstop, not a sandbox — see docs/superpowers/specs/
-// 2026-07-01-trellis-v2-sp15-portable-safety-design.md for the design and known blind
+// This is a best-effort backstop, not a sandbox — see the design notes
+// 2026-07-01-loopwright-v2-sp15-portable-safety-design.md for the design and known blind
 // spots (write-then-run, eval $(base64 -d ...), and other indirection are out of a
 // static guard's reach; permissions.deny + the honesty banner cover the gap).
 

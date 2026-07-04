@@ -62,19 +62,19 @@ function claudeDir() {
 }
 
 function stateMdPath() {
-  return process.env.TRELLIS_STATE_MD || path.join(claudeDir(), 'STATE.md');
+  return process.env.LOOPWRIGHT_STATE_MD || path.join(claudeDir(), 'STATE.md');
 }
 
 function findingsMdPath() {
-  return process.env.TRELLIS_FINDINGS_MD || path.join(claudeDir(), 'FINDINGS.md');
+  return process.env.LOOPWRIGHT_FINDINGS_MD || path.join(claudeDir(), 'FINDINGS.md');
 }
 
 function loopJsonPath() {
-  return process.env.TRELLIS_LOOP_JSON || path.join(claudeDir(), 'loop.json');
+  return process.env.LOOPWRIGHT_LOOP_JSON || path.join(claudeDir(), 'loop.json');
 }
 
 function configPath() {
-  return process.env.TRELLIS_LOOP_CONFIG || path.join(here(), 'loop-config.json');
+  return process.env.LOOPWRIGHT_LOOP_CONFIG || path.join(here(), 'loop-config.json');
 }
 
 function readStdinSync() {

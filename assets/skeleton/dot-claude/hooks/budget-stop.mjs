@@ -3,8 +3,8 @@
 //
 // Two responsibilities, one file read (per the design's §3.6): (1) the iteration +
 // wall-clock budget ceiling (F16); (2) forcing the milestone-gate pause even in
-// headless/auto mode (F25). See docs/superpowers/specs/
-// 2026-07-01-trellis-v2-sp4-liveness-design.md §3.1, §3.5.
+// headless/auto mode (F25). See the design notes
+// 2026-07-01-loopwright-v2-sp4-liveness-design.md §3.1, §3.5.
 //
 // Error-handling convention (O4, deliberately DIFFERENT from SP1.5's guard.mjs):
 // guard.mjs fails CLOSED (deny) because it's a PreToolUse safety gate — an unevaluated
@@ -40,15 +40,15 @@ function claudeDir() {
 }
 
 function loopJsonPath() {
-  return process.env.TRELLIS_LOOP_JSON || path.join(claudeDir(), 'loop.json');
+  return process.env.LOOPWRIGHT_LOOP_JSON || path.join(claudeDir(), 'loop.json');
 }
 
 function configPath() {
-  return process.env.TRELLIS_LOOP_CONFIG || path.join(here(), 'loop-config.json');
+  return process.env.LOOPWRIGHT_LOOP_CONFIG || path.join(here(), 'loop-config.json');
 }
 
 function stateMdPath() {
-  return process.env.TRELLIS_STATE_MD || path.join(claudeDir(), 'STATE.md');
+  return process.env.LOOPWRIGHT_STATE_MD || path.join(claudeDir(), 'STATE.md');
 }
 
 function isValidBudget(b) {
@@ -152,7 +152,7 @@ function main() {
     // --- F16/F7: iteration + ACTIVE-time wall-clock budget ceiling ---
     // SP7/F7: compares accumulated `active_seconds` (idle gaps capped, see above), not
     // calendar `now - started_at` — a long idle gap (waiting on a human, a milestone
-    // pause) no longer silently burns the ceiling the way it did before (the Lumen run
+    // pause) no longer silently burns the ceiling the way it did before (a prior real run
     // hit 209% of its 6h ceiling with no effect because ~13h of that was idle).
     const iterationAfter = state.iteration + 1;
     const wallClock = state.active_seconds || 0;

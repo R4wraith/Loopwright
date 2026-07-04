@@ -60,7 +60,7 @@ function runHook({ dir, loopJsonState, command }) {
     input: stdin,
     encoding: 'utf8',
     cwd: dir,
-    env: { ...process.env, TRELLIS_LOOP_JSON: loopJsonPath, TRELLIS_PROJECT_DIR: dir },
+    env: { ...process.env, LOOPWRIGHT_LOOP_JSON: loopJsonPath, LOOPWRIGHT_PROJECT_DIR: dir },
   });
   let finalState = null;
   try { finalState = JSON.parse(readFileSync(loopJsonPath, 'utf8')); } catch { /* not written */ }

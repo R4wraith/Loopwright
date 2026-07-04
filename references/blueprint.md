@@ -4,7 +4,7 @@ This is the reasoning behind the harness. SKILL.md is the checklist; this is the
 
 > **How this skill gets triggered (SP6/F39).** `SKILL.md`'s `description:` is kept short and
 > trigger-dense on purpose (it's a match target the model scans every session, not a summary a
-> human reads) — it still covers every scenario: naming Trellis directly, describing a new
+> human reads) — it still covers every scenario: naming Loopwright directly, describing a new
 > project and asking for autonomous/agentic setup without naming the harness, asking for a
 > self-driving/task-after-task loop, a multi-agent or PM-orchestrated Claude Code setup, a
 > drop-in `.claude` folder, a "blueprint"/"harness"/"scaffold", or a request to recreate the

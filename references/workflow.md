@@ -1,10 +1,10 @@
 # The workflow — idea to production
 
-Trellis is built for **long, multi-feature sessions** that take a real project from nothing to something you'd ship — not one-off snippets. This is the recommended way to run it, and why each step is there.
+Loopwright is built for **long, multi-feature sessions** that take a real project from nothing to something you'd ship — not one-off snippets. This is the recommended way to run it, and why each step is there.
 
 ## The shape
 
-Naive "vibecoding" (let the model freewheel, don't read the diff) is great for a throwaway demo and falls apart on real software: it builds the wrong thing first, loses the thread after a few features, and reports stubs as done. Trellis keeps the *ergonomics* — you work at the level of intent, not line-by-line — and adds the structure that lets a session run long, carry many features, and survive contact with a production-bound codebase. The full cycle, milestone after milestone: **explore → design → plan → implement**, with context preserved across the whole thing.
+Naive "vibecoding" (let the model freewheel, don't read the diff) is great for a throwaway demo and falls apart on real software: it builds the wrong thing first, loses the thread after a few features, and reports stubs as done. Loopwright keeps the *ergonomics* — you work at the level of intent, not line-by-line — and adds the structure that lets a session run long, carry many features, and survive contact with a production-bound codebase. The full cycle, milestone after milestone: **explore → design → plan → implement**, with context preserved across the whole thing.
 
 The division of labour is the point: **you decide at the seams, the agent does the volume.**
 
@@ -18,9 +18,9 @@ Capture that thinking as a single high-level design doc. Aim to cover: what it d
 
 `idea.md` is the contract between your planning brain and the build loop. A good one means the scaffolder barely has to ask you anything; a vague one produces a vague harness.
 
-## Step 3 — Hand off to Claude Code + Trellis
+## Step 3 — Hand off to Claude Code + Loopwright
 
-Drop `idea.md` into the (empty) project folder. With Trellis installed (user-global, or project-scoped in that folder's `.claude/skills/`), ask it to scaffold. Trellis **reads your `idea.md`**, makes the architecture calls it implies — the keystone, what to wrap vs build, the build order, the subagent roster — and writes the tailored `.claude/` harness into the folder. It only asks you about genuine gaps.
+Drop `idea.md` into the (empty) project folder. With Loopwright installed (user-global, or project-scoped in that folder's `.claude/skills/`), ask it to scaffold. Loopwright **reads your `idea.md`**, makes the architecture calls it implies — the keystone, what to wrap vs build, the build order, the subagent roster — and writes the tailored `.claude/` harness into the folder. It only asks you about genuine gaps.
 
 ## Step 4 — Fresh session, then `/start`
 
@@ -40,7 +40,7 @@ Everything between those — decomposition, the specialist subagents, review, te
 
 - **Agent teams, not one giant context.** Heavy work is farmed out to parallel subagents, each with its own focused context that returns a tight summary. The main thread stays lean, so the session can carry many features without drowning in its own history. The same property makes it suit **programmatic / headless** operation (Claude Code's SDK / `claude -p`) rather than a single long interactive chat.
 - **Git is the memory.** Durable state lives in the journal (`GOAL` / `STATE` / `PROGRESS` / `DECISIONS`) and in git. After a context reset or compaction, the agent re-reads compact truth instead of re-deriving everything — so long runs resume cleanly with `continue the loop` or another `/loop`.
-- **Quality over thrift.** The architecture happens to be context-efficient, but Trellis does **not** optimize for fewer tokens. It spends what it takes to build a real system from zero and get it right — durable beats cheap.
+- **Quality over thrift.** The architecture happens to be context-efficient, but Loopwright does **not** optimize for fewer tokens. It spends what it takes to build a real system from zero and get it right — durable beats cheap.
 
 ## Running it unattended
 

@@ -10,14 +10,14 @@
 //
 // Fail-safe, not fail-closed: a missing or corrupt loop.json is treated as a fresh run
 // (never throws) — losing the counter file should degrade to "budget restarts," not
-// wedge the loop. See docs/superpowers/specs/2026-07-01-trellis-v2-sp4-liveness-design.md.
+// wedge the loop. the bounded-autonomy design notes.
 
 import { readFileSync, writeFileSync, renameSync, unlinkSync, existsSync } from 'node:fs';
 
 // ---------------------------------------------------------------------------
 // Budget config — the single documented place for the conservative defaults
 // (also mirrored, with commentary, in hooks/loop-config.json — O3: these are
-// placeholders until SP6's baseline.md grounds them from real shifts).
+// placeholders until a measured baseline grounds them from real shifts).
 // ---------------------------------------------------------------------------
 
 export const DEFAULT_CONFIG = Object.freeze({
@@ -147,7 +147,7 @@ export function elapsedWallClockSec(state, now = nowSec()) {
  * previous heartbeat is added, capped at `idleGapCapSec` (default from DEFAULT_CONFIG) —
  * a gap longer than the cap (the loop sat idle, e.g. waiting on a human) counts as idle,
  * not active, so a long calendar gap can no longer silently inflate the budget the way
- * the Lumen run's 209%-of-6h-ceiling run did. Pure: does not mutate `state` and does NOT
+ * that prior run's 209%-of-6h-ceiling run did. Pure: does not mutate `state` and does NOT
  * itself touch `heartbeat_at` — that remains updateHeartbeat/incrementIteration's job, so
  * repeated calls without an intervening heartbeat bump would double-count (by design,
  * mirroring how those two functions divide labor already).
@@ -224,15 +224,15 @@ function here() {
 }
 
 function defaultLoopJsonPath() {
-  return process.env.TRELLIS_LOOP_JSON || path.join(here(), '..', 'loop.json');
+  return process.env.LOOPWRIGHT_LOOP_JSON || path.join(here(), '..', 'loop.json');
 }
 
 function defaultConfigPath() {
-  return process.env.TRELLIS_LOOP_CONFIG || path.join(here(), 'loop-config.json');
+  return process.env.LOOPWRIGHT_LOOP_CONFIG || path.join(here(), 'loop-config.json');
 }
 
 function defaultProjectDir() {
-  return process.env.TRELLIS_PROJECT_DIR || process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  return process.env.LOOPWRIGHT_PROJECT_DIR || process.env.CLAUDE_PROJECT_DIR || process.cwd();
 }
 
 function cli() {

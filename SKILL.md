@@ -1,16 +1,16 @@
 ---
-name: trellis
+name: loopwright
 description: >-
   Scaffold a drop-in `.claude/` autonomous build harness for a software project: a
   PM-orchestrated Claude Code setup with a persistent build loop, tailored specialist subagents,
   safety hooks, and a build journal. Use when the user wants autonomous/agentic development set
   up, a self-driving build loop, a multi-agent or PM-orchestrated Claude Code setup, a drop-in
   `.claude` folder, or a project "blueprint"/"harness"/"scaffold" — including when they just
-  describe a new project and ask for it to be built autonomously without naming Trellis. Also
+  describe a new project and ask for it to be built autonomously without naming Loopwright. Also
   trigger on "recreate the same blueprint/setup" for a different idea.
 ---
 
-# Trellis
+# Loopwright
 
 Turn any project idea into a **drop-in `.claude/` folder** that makes Claude Code build it autonomously, task after task, as a lead-engineer/PM that dispatches specialist subagents through a persistent loop — with safety hooks, git discipline, and an honest build journal baked in.
 
@@ -29,13 +29,13 @@ A single `.claude/` folder the user drops into their project root and runs `/sta
 - `scripts/` (run-tests, check) and `githooks/` (pre-commit secret scan, pre-push test gate).
 
 ## Recommended workflow (idea → production)
-Trellis is built for **long, multi-feature sessions** that take a project from zero to shippable — the full cycle: explore → design → plan → implement, milestone after milestone. Best-practice flow:
+Loopwright is built for **long, multi-feature sessions** that take a project from zero to shippable — the full cycle: explore → design → plan → implement, milestone after milestone. Best-practice flow:
 1. **Plan** on a clean session with the strongest model (e.g. Opus 4.8) — no code yet.
-2. **Write `idea.md`** — a high-level design (what it does, features, output, how it works, the feel, milestones). Template: `assets/idea.template.md`. `/trellis:brainstorm` is the principled way to produce a strong `idea.md`: a one-question-at-a-time interview grounded in the CLAUDE.md principles (keystone-first, wrap > build, memory-safe, simplest-thing) that also researches and records the relevant Skills/MCP servers. It's optional — you can still hand-write `idea.md` — but it's the recommended path.
-3. **Scaffold** — hand `idea.md` to Claude Code + Trellis; it writes the tailored `.claude/` into the project folder.
+2. **Write `idea.md`** — a high-level design (what it does, features, output, how it works, the feel, milestones). Template: `assets/idea.template.md`. `/loopwright:brainstorm` is the principled way to produce a strong `idea.md`: a one-question-at-a-time interview grounded in the CLAUDE.md principles (keystone-first, wrap > build, memory-safe, simplest-thing) that also researches and records the relevant Skills/MCP servers. It's optional — you can still hand-write `idea.md` — but it's the recommended path.
+3. **Scaffold** — hand `idea.md` to Claude Code + Loopwright; it writes the tailored `.claude/` into the project folder.
 4. **Build** — open a fresh session in that folder and run `/start`.
 
-The full pipeline: **`/trellis:brainstorm` (craft `idea.md`) → `/trellis:new` (scaffold) → `/start` (build)**.
+The full pipeline: **`/loopwright:brainstorm` (craft `idea.md`) → `/loopwright:new` (scaffold) → `/start` (build)**.
 
 The division of labour: the **human owns the seams** (the `idea.md` design, the milestone reviews, the occasional fork); the **loop owns the implementation cycle**. Full detail in `references/workflow.md`.
 

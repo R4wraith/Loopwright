@@ -5,7 +5,7 @@
 // `## Compaction anchor` heading in the git-tracked STATE.md — not into a hook-private
 // file, so it survives compaction without depending on the audit-disputed PostCompact
 // event. session-orient.mjs (SessionStart, source=compact) reads this block back out.
-// See docs/superpowers/specs/2026-07-01-trellis-v2-sp4-liveness-design.md §3.2.
+// the bounded-autonomy design notes.
 //
 // PreCompact is a side-effect hook here, never a gate: any failure (missing STATE.md,
 // unreadable FINDINGS.md, missing loop.json) logs to stderr and exits 0 — compaction
@@ -93,15 +93,15 @@ function claudeDir() {
 }
 
 function stateMdPath() {
-  return process.env.TRELLIS_STATE_MD || path.join(claudeDir(), 'STATE.md');
+  return process.env.LOOPWRIGHT_STATE_MD || path.join(claudeDir(), 'STATE.md');
 }
 
 function findingsMdPath() {
-  return process.env.TRELLIS_FINDINGS_MD || path.join(claudeDir(), 'FINDINGS.md');
+  return process.env.LOOPWRIGHT_FINDINGS_MD || path.join(claudeDir(), 'FINDINGS.md');
 }
 
 function loopJsonPath() {
-  return process.env.TRELLIS_LOOP_JSON || path.join(claudeDir(), 'loop.json');
+  return process.env.LOOPWRIGHT_LOOP_JSON || path.join(claudeDir(), 'loop.json');
 }
 
 function readStdinSync() {

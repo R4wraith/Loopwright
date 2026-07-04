@@ -63,11 +63,11 @@ function claudeDir() {
 }
 
 function loopJsonPath() {
-  return process.env.TRELLIS_LOOP_JSON || path.join(claudeDir(), 'loop.json');
+  return process.env.LOOPWRIGHT_LOOP_JSON || path.join(claudeDir(), 'loop.json');
 }
 
 function projectDir() {
-  return process.env.TRELLIS_PROJECT_DIR || process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  return process.env.LOOPWRIGHT_PROJECT_DIR || process.env.CLAUDE_PROJECT_DIR || process.cwd();
 }
 
 function git(args) {
@@ -143,7 +143,7 @@ function main() {
     // its last DoD/verify pass (via `loop-state.mjs --set-verified-tree`), compare it to
     // what actually got committed. Unset => no-op (backward compatible with pre-SP7
     // loop.json). A mismatch means the committed tree drifted from what was last verified
-    // — exactly the class of bug that shipped the Lumen run's stale-partial commit
+    // — exactly the class of bug that shipped that prior run's stale-partial commit
     // (`066a52a`), which this file's STATE/PROGRESS-only check didn't catch.
     //
     // SP7 post-eval fix (F6.1) — ONE-SHOT, not sticky: `verified_tree_sha` is stamped once

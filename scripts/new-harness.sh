@@ -11,12 +11,12 @@
 # An empty or absent <target>/.claude/ always just gets the skeleton copied in, no flag needed.
 set -euo pipefail
 # Skeleton source resolution (SP-pkg, plugin-cache coupling):
-# When Trellis runs as an installed Claude Code plugin, Claude Code substitutes
+# When Loopwright runs as an installed Claude Code plugin, Claude Code substitutes
 # ${CLAUDE_PLUGIN_ROOT} into command invocations to point at the plugin's own copy inside the
 # versioned plugin cache (~/.claude/plugins/cache/...), not at whatever directory this script
 # happens to be checked out in. Prefer that when set. Otherwise fall back to the pre-plugin
 # relative-path resolution (dev/sandbox checkout, `--plugin-dir`, or the legacy
-# ~/.claude/skills/trellis manual-install path) — same behavior as before this SP.
+# ~/.claude/skills/loopwright manual-install path) — same behavior as before this SP.
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
   here="$CLAUDE_PLUGIN_ROOT"
 else
