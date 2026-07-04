@@ -318,7 +318,3 @@ loopwright/
 ## Acknowledgements
 
 Standing on good ideas from others: **Andrej Karpathy** (the coding-agent failure modes the rules counter), the broader practice of wrapping mature tools rather than rebuilding them, the episodic-memory ecosystem, and Anthropic's skill and plugin conventions.
-
-## License
-
-[MIT][LICENSE]
