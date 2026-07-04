@@ -161,7 +161,7 @@ Trellis ships as both a **versioned plugin** (recommended — updates, namespace
 **Plugin (recommended):**
 
 ```
-/plugin marketplace add <your-username>/trellis
+/plugin marketplace add R4Wraith/trellis
 /plugin install trellis@trellis-marketplace
 ```
 
@@ -174,7 +174,7 @@ A skill is just a folder Claude Code watches:
 
 ```bash
 # personal — available in every project
-git clone https://github.com/<your-username>/trellis ~/.claude/skills/trellis
+git clone https://github.com/R4Wraith/trellis ~/.claude/skills/trellis
 
 # from a downloaded zip
 mkdir -p ~/.claude/skills && unzip trellis.zip -d ~/.claude/skills/
