@@ -734,7 +734,12 @@ function main() {
 
 const isMain = (() => {
   try {
-    return process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+    if (!process.argv[1]) return false;
+    const self = fileURLToPath(import.meta.url);
+    const invoked = path.resolve(process.argv[1]);
+    // win32 paths are case-insensitive: compare lowercased so a drive-letter/case
+    // mismatch can never silently no-op this fail-closed gate (v2 defect).
+    return process.platform === 'win32' ? self.toLowerCase() === invoked.toLowerCase() : self === invoked;
   } catch {
     return false;
   }

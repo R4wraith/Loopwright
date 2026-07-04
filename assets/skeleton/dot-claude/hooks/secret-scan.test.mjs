@@ -187,3 +187,41 @@ describe('process-level: end-to-end secret-scan.mjs hook', () => {
     assert.equal(r.code, 0);
   });
 });
+
+describe('isMain win32 casing (v2 defect pin) — case-mangled invocation still runs main()', () => {
+  // Same v2 defect as guard.mjs: a strict `===` isMain compare silently no-ops the hook
+  // when the invoking path's casing differs from import.meta.url's — the scan never runs
+  // and a written secret goes unreported. The v3 fix lowercases both sides on win32.
+  // This pin spawns the REAL hook through a case-mangled path and proves the scan still
+  // fires (exit 2 on a planted secret), i.e. main() actually ran.
+  const onWin32 = process.platform === 'win32';
+
+  // Lowercase the drive letter and uppercase the directory components; keep the basename
+  // untouched (Node keys the module format off the `.mjs` extension). win32 filesystems
+  // are case-insensitive, so the mangled path resolves to the same file on disk.
+  function mangleDirCase(p) {
+    const dir = path.dirname(p);
+    const base = path.basename(p);
+    return dir.charAt(0).toLowerCase() + dir.slice(1).toUpperCase() + path.sep + base;
+  }
+
+  test('case-mangled absolute argv[1] => scan still fires (exit 2 on a secret)', { skip: !onWin32 }, () => {
+    const secretValue = 'plainunquotedvalue123';
+    const f = tmpFile('mangled-invoke.env', `API_KEY=${secretValue}\n`);
+    const mangled = mangleDirCase(SCAN_PATH);
+    assert.notEqual(mangled, SCAN_PATH, 'sanity: the path must actually be case-mangled');
+    let r;
+    try {
+      execFileSync(process.execPath, [mangled], {
+        input: JSON.stringify({ tool_input: { file_path: f } }),
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+      r = { code: 0, stderr: '' };
+    } catch (e) {
+      r = { code: e.status, stderr: e.stderr ? e.stderr.toString() : '' };
+    }
+    assert.equal(r.code, 2, `expected the scan to fire (exit 2) via case-mangled argv[1] '${mangled}'; got exit ${r.code} (main() did not run?)`);
+    assert.match(r.stderr, /UNQUOTED_ENV_ASSIGNMENT/);
+    assert.ok(!r.stderr.includes(secretValue), 'stderr must never contain the secret value (F36)');
+  });
+});

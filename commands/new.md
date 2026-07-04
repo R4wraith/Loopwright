@@ -53,7 +53,8 @@ minimum D1 wrap-vs-build, D2 language).
 
 Spine (always present, generic): `reviewer`, `test-engineer`, `integrator`, `release-manager`,
 `performance-engineer` (+ `appsec-reviewer`, `threat-modeler` per SP2). Component-owners: one per
-major component from Step 1. See `references/agent-roster.md`.
+major component from Step 1, each with a matching `manifests/<name>.jsonl` context read-list. See
+`references/agent-roster.md`.
 
 ## Step 4 — Materialize the `.claude/` folder
 
@@ -63,16 +64,21 @@ major component from Step 1. See `references/agent-roster.md`.
    ```
    (`new-harness.sh` resolves the skeleton from `${CLAUDE_PLUGIN_ROOT}/assets/skeleton/dot-claude`
    when running as an installed plugin, so this works correctly out of the plugin cache — see the
-   script's own header comment. It's idempotent: refuses to overwrite a non-empty existing
+   script's own header comment. It recursively copies the whole skeleton tree — WORKFLOW.md, the
+   memory docs, agents/, commands/, hooks/, manifests/, ledger/, scripts/, githooks/ — so the copy
+   always tracks the real skeleton. It's idempotent: refuses to overwrite a non-empty existing
    `.claude/` by default; pass `--backup` or `--force` to the script if the target already has one
    and the user wants to proceed anyway.)
 2. Fill every `{{PLACEHOLDER}}` in `CLAUDE.md`, `DESIGN.md`, `GOAL.md`, `STATE.md`, `PROGRESS.md`,
-   `DECISIONS.md`, `LEARNINGS.md`, `CODEMAP.md`, `README.md` using Steps 1–3. Confirm `CLAUDE.md`
-   still carries `Harness-Version: 2.0` (verbatim — don't touch this line).
+   `DECISIONS.md`, `LEARNINGS.md`, `CODEMAP.md`, `TASKS.md`, `README.md` using Steps 1–3. Seed
+   `TASKS.md` with the first milestone's tasks (queued, keystone first). Leave `FINDINGS.md`,
+   `PERF.md`, and `HANDOFF.md` as their shipped templates (they fill during the build). Confirm
+   `CLAUDE.md` still carries `Harness-Version: 3.0` (verbatim — don't touch this line) and leave
+   `WORKFLOW.md` **verbatim** — it is a mechanism file, never tailored.
 3. Generate one `agents/<name>.md` per component-owner from the template in
-   `references/agent-roster.md`.
-4. Leave the verbatim files unchanged: `settings.json`, `hooks/`, `scripts/`, `githooks/`,
-   `commands/`, and the spine agents.
+   `references/agent-roster.md`, plus a matching `manifests/<name>.jsonl` seed read-list.
+4. Leave the verbatim files unchanged: `WORKFLOW.md`, `settings.json`, `hooks/`, `scripts/`,
+   `githooks/`, `commands/`, `manifests/` seed rows, `ledger/`, and the spine + security agents.
 5. If `idea.md` has `## Skills to leverage` / `## MCP servers`, propagate them: add a "Leverage these
    skills / MCP" note to the generated `CLAUDE.md` conventions + a `DECISIONS` `D#` entry. Do NOT
    auto-wire MCP into `settings.json`/`.mcp.json` — flag it for the user to confirm (wiring an MCP
@@ -82,13 +88,13 @@ major component from Step 1. See `references/agent-roster.md`.
 ## Step 5 — Hand off
 
 Tell the user: drop `.claude/` into the project root (already done by step 4), open Claude Code
-there, run `/start`. Remind them to confirm the language in `DECISIONS.md` (D2) before any
-keystone code is generated.
+there, run `/start`. `/start` opens the run and the first shift, then enters the loop. Remind them
+to confirm the language in `DECISIONS.md` (D2) before any keystone code is generated.
 
 ---
 **Namespace note:** this command (`/loopwright:new`) and `/loopwright:upgrade` are the plugin's *own*
 operation — they live in this plugin-root `commands/` folder. They are unrelated to (and never
 collide with) the *generated* project's own un-namespaced `/start`, `/goal`, `/loop`, `/status`,
-`/dream`, which ship inside `assets/skeleton/dot-claude/commands/` and are copied into the
-*target* project's `.claude/commands/` — a scaffolded project is not itself a plugin, so those
-never get namespaced or auto-discovered from here.
+`/shift`, `/handoff`, `/routine`, `/dream`, which ship inside `assets/skeleton/dot-claude/commands/` and are
+copied into the *target* project's `.claude/commands/` — a scaffolded project is not itself a
+plugin, so those never get namespaced or auto-discovered from here.

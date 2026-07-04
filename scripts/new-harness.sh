@@ -2,6 +2,17 @@
 # Copy the harness skeleton into a target project's .claude/ folder.
 # Usage: bash scripts/new-harness.sh <target-project-dir> [--backup|--force]
 #
+# What gets copied: the WHOLE skeleton tree under assets/skeleton/dot-claude — a recursive
+# copy, so it always tracks the real skeleton (no hard-coded file list to drift out of sync).
+# For Harness-Version 3.0 that is, in one shot:
+#   WORKFLOW.md (the verbatim run→shift→iteration→slice mechanism) + the memory docs
+#   (CLAUDE.md/DESIGN.md/GOAL.md/STATE.md/PROGRESS.md/DECISIONS.md/FINDINGS.md/LEARNINGS.md/
+#    CODEMAP.md/PERF.md/TASKS.md/README.md), agents/, commands/,
+#   hooks/ (guard · secret-scan · budget-stop · journal-integrity · loop-state · workflow-state ·
+#    subagent-context · tasks · ledger, + loop-config.json + secret-patterns.txt),
+#   manifests/ (per-subagent context read-lists), ledger/ (events.jsonl + archive/),
+#   scripts/, githooks/, semgrep.yml, settings.json, .gitignore, .gitattributes.
+#
 # Idempotency (F7, SP6):
 #   default    refuse to overwrite a non-empty existing <target>/.claude/ — exit 1, no data lost.
 #   --backup   move the existing <target>/.claude/ aside to <target>/.claude.bak-<UTC ts>/ first,
@@ -66,8 +77,10 @@ fi
 
 mkdir -p "$dest"
 cp -r "$src/." "$dest/"
-chmod +x "$dest/hooks/"*.sh "$dest/scripts/"*.sh "$dest/githooks/"* 2>/dev/null || true
+# hooks are Node (.mjs, invoked via `node`); scripts + githooks run directly and need the bit.
+chmod +x "$dest/scripts/"*.sh "$dest/githooks/"* "$dest/hooks/"*.mjs 2>/dev/null || true
 echo "Skeleton copied to $dest/"
-echo "Next: fill the {{PLACEHOLDERS}} in CLAUDE.md, DESIGN.md, GOAL.md, STATE.md, PROGRESS.md, DECISIONS.md, README.md,"
-echo "and generate one agents/<name>.md per component-owner (see the skill's references/agent-roster.md)."
+echo "Next: fill the {{PLACEHOLDERS}} in CLAUDE.md, DESIGN.md, GOAL.md, STATE.md, PROGRESS.md, DECISIONS.md, TASKS.md, README.md,"
+echo "and generate one agents/<name>.md (+ manifests/<name>.jsonl) per component-owner (see the skill's references/agent-roster.md)."
+echo "Leave verbatim: WORKFLOW.md, settings.json, hooks/, scripts/, githooks/, manifests/ seeds, ledger/, and the spine agents."
 echo "Check nothing was missed:  grep -rn '{{' \"$dest\""

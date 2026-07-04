@@ -1,8 +1,37 @@
 {
-  "_comment": "SP4 bounded-autonomy budget ceilings — CONSERVATIVE placeholders (see the bounded-autonomy design notes. Ground these from a measured baseline once real shifts are measured; ship conservative until then. This is the single documented place for the numbers — loop-state.mjs reads it, falling back to the same values if the file is missing/unreadable.",
-  "max_iterations": 40,
-  "max_wall_clock_sec": 21600,
-  "milestone_iter_soft": 12,
-  "idle_gap_cap_sec": 600,
-  "_idle_gap_cap_sec_comment": "SP7/F7 — max_wall_clock_sec is now compared against ACCUMULATED ACTIVE seconds, not calendar time since started_at. Each Stop adds min(now - last heartbeat, idle_gap_cap_sec) to loop.json's active_seconds; a gap longer than this (e.g. a milestone-review pause waiting on a human) counts as idle, not active, so it no longer silently burns the wall-clock ceiling (a prior real run hit 209% of its 6h ceiling with zero effect because ~13h of that was idle)."
+  "_comment": "v3 bounded-autonomy budget config (§5.1) — CONSERVATIVE placeholders; ground them from measured shifts. loop-state.mjs/budget-stop.mjs read this file FRESH at every Stop (config-wins rule: edit it mid-run and it applies at the next Stop; a per-shift --extend-budget/--budget-iters override beats it). Missing/unreadable/unparseable falls back to the same values baked into loop-state.mjs DEFAULT_CONFIG. The v2 flat shape (top-level max_iterations etc.) is still accepted and maps onto shift.*.",
+  "shift": {
+    "max_iterations": 40,
+    "max_wall_clock_sec": 21600,
+    "idle_gap_cap_sec": 600
+  },
+  "_shift_comment": "Per-shift ceilings, v2 semantics carried: max_wall_clock_sec is compared against ACCUMULATED ACTIVE seconds, not calendar time — each Stop adds min(now - last heartbeat, idle_gap_cap_sec), so a long idle pause (milestone review, overnight) costs at most the cap. A prior real run hit 209% of its 6h ceiling with zero effect because ~13h of that was idle; the cap is why that can't happen again. max_iterations is the hard runaway floor regardless of time accounting.",
+  "run": {
+    "max_shifts": 0,
+    "max_iterations": 0,
+    "max_active_seconds": 0
+  },
+  "_run_comment": "Cumulative ceilings across the whole run (all shifts). 0 = unlimited. When one is exhausted: budget-stop posts the run-scope wind-down and --start-shift refuses until a human runs --extend-budget run.<key>=<value> (logged with operator) or --complete-run. GOAL.md success criteria remain the real terminus.",
+  "milestone": {
+    "gate_block_max": 3,
+    "approval_ttl_hours": 72,
+    "milestone_iter_soft": 12
+  },
+  "_milestone_comment": "gate_block_max: after N consecutive milestone-gate blocks with no valid token, the block switches to the headless wind-down instruction and the following Stop is allowed — an unattended gated shift converges to a clean HANDOFF instead of looping. approval_ttl_hours: an --approve token expires after this many hours (expired tokens are never consumed — the gate re-blocks); 0 disables expiry.",
+  "session": {
+    "lease_stale_sec": 900,
+    "stale_after_sec": 259200
+  },
+  "_session_comment": "lease_stale_sec: a shift lease not renewed for this long is considered abandoned (crash) and a new session may take it over. stale_after_sec: session pointer files under .runtime/sessions/ older than this are swept at session boot / --doctor --repair.",
+  "ledger": {
+    "rotate_lines": 5000
+  },
+  "_ledger_comment": "At shift end, when ledger/events.jsonl exceeds this many lines it is moved to ledger/archive/ and reseeded with one ledger_rotated genesis event whose carried snapshot keeps replay and --shifts history archive-free.",
+  "routines": {
+    "end-of-shift": { "steps": ["/dream", "/handoff"], "note": "run before leaving" },
+    "morning-orient": { "steps": ["Read .claude/HANDOFF.md in full", "/status"], "note": "incoming-operator digest" },
+    "nightly": { "steps": ["/loop continue", "/handoff"], "note": "headless; budget backstop bounds it" },
+    "full-check": { "steps": ["bash .claude/scripts/run-tests.sh", "bash .claude/scripts/check.sh", "bash .claude/scripts/check-gate.sh"], "note": "full sweep" }
+  },
+  "_routines_comment": "The /routine menu ONLY (§4.5). No hook reads this key — the deterministic seams (handoff-on-winddown, SessionEnd checkpoint, budget stop) are hooks, so a typo here can never break enforcement. /routine <name> executes the steps in order and finishes with loop-state --log-routine <name>."
 }

@@ -1,10 +1,9 @@
 # CODEMAP — code-structure awareness (Tier 2)
 
 _Curated, not exhaustive. Only modules and symbols with real contracts or coupling belong here — if
-this lists everything it's worthless and stale by morning. Updated at the loop's **Record** step
-(SP-mem), in the same commit as the code it describes. Git wins over memory: if a row drifts from
-the code, that's a `.claude/FINDINGS.md` `F#` (`codemap-drift`) — verified against reality, not
-trusted blindly._
+this lists everything it's worthless and stale by morning. Updated at the loop's **Record** step, in
+the same commit as the code it describes. Git wins over memory: if a row drifts from the code, that's
+a `.claude/FINDINGS.md` `F#` (`codemap-drift`) — verified against reality, not trusted blindly._
 
 `Codemap-Scale: codemap-only`   <!-- codemap-only | +lsp-mcp | +graph — escalation ladder is in CLAUDE.md's "Memory" section. Promotions are logged as a DECISIONS.md `D#`. -->
 

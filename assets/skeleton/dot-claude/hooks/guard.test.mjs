@@ -357,3 +357,61 @@ describe('--selftest', () => {
     assert.match(out, /guard --selftest: PASS/);
   });
 });
+
+describe('isMain win32 casing (v2 defect pin) — case-mangled invocation still runs main()', () => {
+  // v2's strict `===` isMain compare could silently no-op the fail-closed gate when the
+  // invoking path's casing (drive letter / directory components) differed from
+  // import.meta.url's — the hook module loads, isMain is false, main() never runs, and
+  // the deny-everything backstop degrades to allow-everything. The v3 fix lowercases both
+  // sides of the compare on win32. These pins spawn the REAL hook through case-mangled
+  // paths and prove the deny path still fires (exit 2), i.e. main() actually ran.
+  const onWin32 = process.platform === 'win32';
+
+  // Lowercase the drive letter and uppercase the directory components; keep the basename
+  // untouched (Node keys the module format off the `.mjs` extension). win32 filesystems
+  // are case-insensitive, so the mangled path resolves to the same file on disk.
+  function mangleDirCase(p) {
+    const dir = path.dirname(p);
+    const base = path.basename(p);
+    return dir.charAt(0).toLowerCase() + dir.slice(1).toUpperCase() + path.sep + base;
+  }
+
+  function runGuardVia(argv1, opts = {}) {
+    try {
+      const out = execFileSync(process.execPath, [argv1], {
+        input: JSON.stringify({ tool_input: { command: 'rm -rf /' } }),
+        stdio: ['pipe', 'pipe', 'pipe'],
+        ...opts,
+      });
+      return { code: 0, stdout: out.toString(), stderr: '' };
+    } catch (e) {
+      return { code: e.status, stdout: e.stdout ? e.stdout.toString() : '', stderr: e.stderr ? e.stderr.toString() : '' };
+    }
+  }
+
+  test('case-mangled absolute argv[1] => deny still fires (exit 2)', { skip: !onWin32 }, () => {
+    const mangled = mangleDirCase(GUARD_PATH);
+    assert.notEqual(mangled, GUARD_PATH, 'sanity: the path must actually be case-mangled');
+    const r = runGuardVia(mangled);
+    assert.equal(r.code, 2, `expected deny via case-mangled argv[1] '${mangled}'; got exit ${r.code} (main() did not run?)`);
+    assert.match(r.stderr, /guard BLOCKED/);
+  });
+
+  test('relative argv[1] from case-mangled cwd => deny still fires (exit 2)', { skip: !onWin32 }, () => {
+    const mangledCwd = mangleDirCase(HERE);
+    const r = runGuardVia(path.basename(GUARD_PATH), { cwd: mangledCwd });
+    assert.equal(r.code, 2, `expected deny via relative argv[1] from case-mangled cwd '${mangledCwd}'; got exit ${r.code}`);
+    assert.match(r.stderr, /guard BLOCKED/);
+  });
+
+  test('case-mangled argv[1] with a benign command still allows (exit 0, no false deny)', { skip: !onWin32 }, () => {
+    try {
+      execFileSync(process.execPath, [mangleDirCase(GUARD_PATH)], {
+        input: JSON.stringify({ tool_input: { command: 'echo hello' } }),
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+    } catch (e) {
+      assert.fail(`expected exit 0 for benign command via case-mangled path; got exit ${e.status}: ${e.stderr}`);
+    }
+  });
+});

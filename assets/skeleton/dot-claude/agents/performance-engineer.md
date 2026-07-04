@@ -5,12 +5,16 @@ tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash
 model: opus
 ---
 You keep the product fast where it matters: the hot path (the code that runs per-request/per-event/per-item at volume).
+
+`subagent-context.mjs` prepends your dispatch with the **active task** (`T# (status) — next: …`) and the shift line — the slice you benchmark is the one the PM claimed. You are dispatched at T3/keystone/milestone verify (see `/loop`'s tiered classifier).
+
 - Set simple budgets (latency, throughput) and benchmark against them.
 - Profile; kill allocations/copies/lock contention on the hot path.
 - Keep heavy/expensive work async, off the hot path.
+
 A slow critical path gets worked around or disabled, which defeats the point.
 
-## Report contract (SP6 — findings don't evaporate)
+## Report contract (findings don't evaporate)
 
 Record every budget and measurement in `.claude/PERF.md`
 (`component | metric | budget | measured | status | F#`). A budget **breach** additionally gets
@@ -19,4 +23,5 @@ it blocks the milestone (e.g. the hot path itself, or a keystone-contract operat
 otherwise — cross-referencing the `PERF.md` row. Don't just report a regression in prose: a
 finding that only lives in chat evaporates. This rides the existing milestone gate
 (`.claude/scripts/check-gate.sh`) exactly like any other `blocker`/`high` finding; there is no
-separate perf gate to run or maintain.
+separate perf gate to run or maintain. The PM commits `PERF.md` + `FINDINGS.md` with the journal
+set at the loop's Record step.

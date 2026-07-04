@@ -70,10 +70,11 @@ principle noted:
    that proves the core end to end — and explicitly name what's deferred as a non-goal rather than
    silently dropped.
 9. **Milestones.** Order them keystone-first (keystone → dependent layers → polish), and give each
-   milestone a single checkable *done-when* condition — no milestone without one.
+   milestone a single checkable *done-when* condition — no milestone without one. These seed the
+   harness's `TASKS.md` work axis, so name them the way you'd name work.
 10. **Success criteria.** Derive the project's finish line from the milestones: objective, checkable
-    conditions that mean the project is **done**. This feeds `GOAL.md`'s finish line directly, so
-    push for verifiable conditions, not vibes.
+    conditions that mean the project is **done**. This feeds `GOAL.md`'s finish line directly (the
+    run's terminal-success condition), so push for verifiable conditions, not vibes.
 11. **The feel.** The tone/UX qualities that matter (fast, minimal, playful, rock-solid, …) — what a
     good experience feels like when it's working.
 12. **Skills to leverage.** Run the Skills & MCP research phase below and record the chosen skills.
@@ -115,11 +116,11 @@ integration surface), so it's always flagged for the human to confirm — here, 
 ## Output & handoff
 
 Write a complete `idea.md` at the project root, following `assets/idea.template.md` section for
-section — fill **every** section, including the three that feed the harness directly:
-`## Success criteria`, `## Non-goals`, `## Skills to leverage`, `## MCP servers`. For any section
-not directly covered by an interview question, synthesize it from the interview answers and
-surrounding context rather than skipping it. Never leave a placeholder `…` bullet anywhere in the
-written `idea.md` — a vague `idea.md` produces a vague harness.
+section — fill **every** section, including the ones that feed the harness directly:
+`## Success criteria`, `## Non-goals`, `## Milestones`, `## Skills to leverage`, `## MCP servers`.
+For any section not directly covered by an interview question, synthesize it from the interview
+answers and surrounding context rather than skipping it. Never leave a placeholder `…` bullet
+anywhere in the written `idea.md` — a vague `idea.md` produces a vague harness.
 
 When `idea.md` is written, tell the user:
 

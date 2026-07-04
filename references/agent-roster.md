@@ -3,17 +3,25 @@
 The roster has two parts: a fixed **spine** every project needs, and **component-owners** you generate one-per-subsystem.
 
 ## How to derive the roster
-1. Keep the five spine agents as-is (they're already in `assets/skeleton/dot-claude/agents/`).
-2. For each major component from the interview (Step 1), create one component-owner agent from the template below.
+1. Keep the spine agents as-is (they're already in `assets/skeleton/dot-claude/agents/`).
+2. For each major component from the interview (Step 1), create one component-owner agent from the template below, plus a matching `manifests/<name>.jsonl` context read-list.
 3. Name them `<area>-engineer` or `<area>-architect` (use `-architect` for the keystone owner).
 4. 3–6 component-owners is the sweet spot. Fewer → under-decomposed; more → group related ones.
 
 ## The spine (already shipped, generic — don't regenerate)
+Five role-agents plus two read-only security finders:
 - **reviewer** — independent, **read-only** (no Edit/Write, so it can't "fix to pass"); reviews correctness + security; gives a go/no-go. Separation of duties: the auditor isn't the author.
 - **test-engineer** — unit/integration/e2e + fuzzing any parser of untrusted input; never weakens a test to pass.
 - **integrator** — assembles the parts into the real artifact and runs end-to-end smoke tests; a slice isn't done until it works assembled.
-- **release-manager** — git hygiene: feature branches, small Conventional Commits, merges only when green; never destructive git.
+- **release-manager** — git hygiene: feature branches, small Conventional Commits, merges only when green (against the stamped verified tree); never destructive git.
 - **performance-engineer** — budgets/benchmarks/profiles the hot path; keeps heavy work off it.
+- **threat-modeler** — read-only; STRIDE on the change + explicit abuse/misuse cases; files findings, never fixes.
+- **appsec-reviewer** — read-only; an OWASP-category sweep that adjudicates the threat model; files findings, never fixes.
+
+The two security finders hold **no edit tools** — separation of duties is enforced *mechanically*. Their findings become rows in `FINDINGS.md`, which the milestone gate checks.
+
+## Context manifests (subagent-context, v3)
+Every subagent type can carry a curated read-list at `manifests/<subagent_type>.jsonl` (named for the `subagent_type` the Task tool is invoked with). On each Task dispatch, `hooks/subagent-context.mjs` prepends the rows to the dispatch prompt as a **read list** — paths + reasons, never inlined content; the subagent holds Read and fetches the files itself. Good rows are the files that agent should **always** see regardless of the task — the keystone contract, the spec section it reviews against, the test-conventions file. The shipped seeds (`reviewer.jsonl`, `test-engineer.jsonl`, `integrator.jsonl`) carry one seed row each; add real rows when you tailor, and drop a `manifests/<name>.jsonl` next to them for each new component-owner.
 
 ## Component-owner template
 Create `agents/<name>.md` for each component:
@@ -35,13 +43,13 @@ Keep it as simple as it can be while doing its job. Report what you built and an
 
 Guidance for filling it:
 - The **keystone owner** is special — mark it `-architect`, and its brief should stress: small, versioned, validated, codegen-friendly, the thing everything binds to.
-- Give each component-owner a **clear boundary** so two agents don't fight over the same files.
+- Give each component-owner a **clear boundary** so two agents don't fight over the same files. The PM claims the task (`--task T# --to in_progress`) before any owner is dispatched, and keeps the next-step cell execution-precise before every dispatch — that cell is the crash-resume pointer.
 - If a component parses external/untrusted input, say so explicitly — it changes how it's written and tested.
 - **Model routing (SP3):** the template default is `model: sonnet` — routine component-owners execute non-keystone code; risk is caught at verify (the opus `reviewer`), not by the owner's own model. Set `model: opus` on the keystone `-architect` owner (it owns the contract everything binds to) and on any owner of a component that parses untrusted input or holds a keystone-level contract. Don't set every component-owner to opus — that's the "Opus everywhere" posture this template deliberately avoids.
 - **Codemap ownership (SP-mem, Tier 2):** each component-owner keeps `.claude/CODEMAP.md` current for the module(s) it owns — the scaffolder seeds the Modules table from `DESIGN.md`'s components at materialize time; the owner updates its rows (contracts, `depends on`/`callers` edges) at the loop's Record step whenever its module's boundary or public contract changes.
 
 ## Example (from the AgentBox project)
-Spine (all five) + four component-owners:
+Spine (all seven) + four component-owners:
 - `schema-architect` (keystone owner — the event schema)
 - `sensor-integrator` (wraps Tetragon; builds the normalizer)
 - `detection-engineer` (the detection multiplexer: regex/YARA/Sigma)

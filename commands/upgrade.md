@@ -17,12 +17,18 @@ harness is expected at `<target>/.claude/`.
 ## What this command does NOT touch
 
 **Never** read-diffs-and-overwrites, and never even proposes changes to, the project's journal /
-ledger files — these are append-only project history, not scaffolding output — **plus
-`CLAUDE.md`**, which is a *tailored*, filled-in file (not shipped verbatim):
+ledger files — these are append-only project history and tailored intent, not scaffolding output —
+**plus `CLAUDE.md`**, which is a *tailored*, filled-in file (not shipped verbatim):
 
 ```
-GOAL.md  STATE.md  PROGRESS.md  DECISIONS.md  FINDINGS.md  LEARNINGS.md  CODEMAP.md  CLAUDE.md
+GOAL.md  STATE.md  PROGRESS.md  DECISIONS.md  FINDINGS.md  LEARNINGS.md  TASKS.md  HANDOFF.md
+CODEMAP.md  PERF.md  ledger/  manifests/  CLAUDE.md
 ```
+
+`ledger/events.jsonl` is the append-only, event-sourced run history (union-merge on conflict) — it
+is never scaffolding output, so it is never diffed or overwritten. `TASKS.md`/`HANDOFF.md` are
+live intent state, and `manifests/` are team-curated per-agent read-lists — all tailored, all
+excluded.
 
 `CLAUDE.md` is protected from overwrite for two reasons: (1) `/loopwright:new` fills it with
 project-specific, non-`{{PLACEHOLDER}}` content (`{{PROJECT_NAME}}`, `{{ONE_LINE}}`, tailored
@@ -34,17 +40,20 @@ It is never diffed against the skeleton and never offered for whole-file accept/
 the constitution prose changed between versions — see step 4a for what happens instead.
 
 Also excluded from the diff: `DESIGN.md`, `GOAL.md` (already listed above), any component-owner
-agent file (`agents/<name>.md` that isn't one of the seven spine agents), and any file whose
-content still contains a filled-in (non-`{{PLACEHOLDER}}`) project-specific value — these were
-*tailored* for this project by `/loopwright:new`, not shipped verbatim, so a fresh skeleton copy is
-never the right answer for them.
+agent file (`agents/<name>.md` that isn't one of the seven spine agents), any component-owner
+manifest (`manifests/<name>.jsonl`), and any file whose content still contains a filled-in
+(non-`{{PLACEHOLDER}}`) project-specific value — these were *tailored* for this project by
+`/loopwright:new`, not shipped verbatim, so a fresh skeleton copy is never the right answer for them.
 
 Only **mechanism** files — the truly verbatim set from `SKILL.md`'s Step 4 — are ever diffed or
-offered for whole-file update: `commands/`, the seven spine agents in `agents/` (`reviewer`,
-`test-engineer`, `integrator`, `release-manager`, `performance-engineer`, `appsec-reviewer`,
-`threat-modeler`), `hooks/`, `scripts/`, `githooks/`, and `settings.json`. **`CLAUDE.md` is never
-in this set** — see above. To be unambiguous: CLAUDE.md is never a mechanism file, never diffed,
-and never overwritten by this command; it is read-version-only.
+offered for whole-file update: `WORKFLOW.md`, `commands/`, the seven spine agents in `agents/`
+(`reviewer`, `test-engineer`, `integrator`, `release-manager`, `performance-engineer`,
+`appsec-reviewer`, `threat-modeler`), `hooks/`, `scripts/`, `githooks/`, and `settings.json`.
+`WORKFLOW.md` is the run→shift→iteration→slice mechanism (`Harness-Version`-stamped, upgrade-
+refreshable) — if the user tuned its `[workflow-state:*]` block bodies, the per-file diff below is
+where they reconcile that against the new version. **`CLAUDE.md` is never in this set** — see
+above. To be unambiguous: CLAUDE.md is never a mechanism file, never diffed, and never overwritten
+by this command; it is read-version-only.
 
 ## Steps
 
@@ -57,21 +66,23 @@ and never overwritten by this command; it is read-version-only.
    `${CLAUDE_PLUGIN_ROOT}/assets/skeleton/dot-claude/CLAUDE.md` and extract its own
    `Harness-Version:` line — this is what a fresh `/loopwright:new` would stamp today. Again, this is
    a version-stamp read only; the skeleton's `CLAUDE.md` body is never proposed as a replacement
-   for the target's tailored `CLAUDE.md`.
+   for the target's tailored `CLAUDE.md`. (`WORKFLOW.md` carries the same stamp in its header and
+   is diffed as a mechanism file in step 4 — but the authoritative version compare is CLAUDE.md's.)
 3. **Compare.**
    - **Equal** → report "up to date" (harness version matches the installed plugin's current
      skeleton contract) and stop. This is a no-op; no files are touched.
    - **Target is behind** → continue to step 4.
 4. **Diff, never overwrite — mechanism files only.** For each mechanism file/dir listed above
-   (the verbatim set: `commands/`, spine `agents/`, `hooks/`, `scripts/`, `githooks/`,
-   `settings.json`) that exists in both the target and the plugin skeleton, run something
-   equivalent to:
+   (the verbatim set: `WORKFLOW.md`, `commands/`, spine `agents/`, `hooks/`, `scripts/`,
+   `githooks/`, `settings.json`) that exists in both the target and the plugin skeleton, run
+   something equivalent to:
    ```
    diff -u "<target>/.claude/<path>" "${CLAUDE_PLUGIN_ROOT}/assets/skeleton/dot-claude/<path>"
    ```
    Skip (never diff, never touch) anything under the excluded list above — journal/ledger files,
-   `CLAUDE.md`, `DESIGN.md`, component-owner agents, and any file carrying filled-in
-   project-specific content. Present each non-empty diff to the user.
+   `TASKS.md`/`HANDOFF.md`, `ledger/`, `manifests/`, `CLAUDE.md`, `DESIGN.md`, component-owner
+   agents, and any file carrying filled-in project-specific content. Present each non-empty diff to
+   the user.
 4a. **`CLAUDE.md` advisory note, not a diff/accept.** If the plugin's skeleton `CLAUDE.md` prose
    changed between the target's stamped `Harness-Version` and the plugin's current one (per
    `CHANGELOG.md`), surface this as a plain-prose **advisory note** listing what changed in the
@@ -93,5 +104,5 @@ and never overwritten by this command; it is read-version-only.
 ---
 **Namespace note:** see `commands/new.md` for why this command's own namespacing
 (`/loopwright:upgrade`) never collides with the target project's un-namespaced `/start`/`/goal`/
-`/loop`/`/status`/`/dream` commands, which are plain files in the *target* project's
-`.claude/commands/`, not plugin components.
+`/loop`/`/status`/`/shift`/`/handoff`/`/routine`/`/dream` commands, which are plain files in the *target*
+project's `.claude/commands/`, not plugin components.

@@ -38,7 +38,8 @@ What this explicitly will **not** do — and what's deferred to "later" rather t
 Language / framework, and why. (Leave blank to let Loopwright propose one. Lean memory-safe where it parses untrusted input.)
 
 ## Milestones
-Order them so each stands on finished ground. Give each a checkable success criterion.
+Order them so each stands on finished ground. Give each a checkable success criterion. Each milestone
+seeds the harness's `TASKS.md` work axis (milestone → tasks), so name them the way you'd name work.
 
 - **M1 — <keystone>:** … → *done when:* …
 - **M2 — …:** … → *done when:* …
@@ -50,7 +51,7 @@ What "first working version" includes — the smallest thing that proves the cor
 
 ## Success criteria (the finish line)
 Objective, checkable conditions that mean the project is **done** — these seed `GOAL.md`'s finish line
-(the loop's terminal-success condition, distinct from the budget backstop). Verifiable, not vibes.
+(the loop's terminal-success condition, distinct from the shift/run budget backstops). Verifiable, not vibes.
 - …
 
 ## Skills to leverage

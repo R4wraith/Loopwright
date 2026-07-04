@@ -8,8 +8,9 @@ Simple over clever. Don't fake progress — make something actually worth runnin
 
 ## Success criteria (the finish line — immutable)
 The project is **done** when *all* of these objectively hold. The loop checks this at every milestone
-boundary; when they all pass it declares the project complete and **stops** — a *success* terminal
-state, distinct from SP4's budget/wall-clock *resource* stop. Keep them checkable, not vibes:
+boundary; when they all pass, record completion with `node .claude/hooks/loop-state.mjs --complete-run`
+— a *success* terminal state for the whole run, distinct from a budget/wall-clock *resource* stop.
+Keep them checkable, not vibes:
 - {{SUCCESS_CRITERIA}}
 
 ## Non-goals (out of bounds — immutable)
