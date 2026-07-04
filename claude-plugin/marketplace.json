@@ -1,12 +1,12 @@
 {
-  "name": "trellis-marketplace",
+  "name": "loopwright-marketplace",
   "owner": {
-    "name": "<owner>"
+    "name": "Ofek Moalem"
   },
-  "description": "Self-hosted marketplace for the Trellis plugin (personal/team distribution — sandbox to marketplace path).",
+  "description": "Self-hosted marketplace for the Loopwright plugin (personal/team distribution — sandbox to marketplace path).",
   "plugins": [
     {
-      "name": "trellis",
+      "name": "loopwright",
       "source": ".",
       "description": "Scaffold a drop-in .claude/ autonomous build harness — a PM-orchestrated Claude Code setup with a goal + persistent loop, a tailored specialist-subagent roster, deterministic safety hooks, and pre-seeded build state.",
       "version": "2.0.0"

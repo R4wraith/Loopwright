@@ -1,13 +1,13 @@
 {
-  "name": "trellis",
-  "displayName": "Trellis",
+  "name": "loopwright",
+  "displayName": "Loopwright",
   "version": "2.0.0",
   "description": "Scaffold a complete, drop-in .claude/ autonomous build harness — a PM-orchestrated Claude Code setup with a goal + persistent loop, a tailored specialist-subagent roster, deterministic safety hooks, and pre-seeded build state. Use for autonomous/agentic project setup, a self-driving build loop, or a multi-agent PM-orchestrated .claude harness.",
   "author": {
     "name": "Ofek Moalem"
   },
-  "homepage": "https://github.com/R4Wraith/trellis",
-  "repository": "https://github.com/R4Wraith/trellis",
+  "homepage": "https://github.com/R4Wraith/loopwright",
+  "repository": "https://github.com/R4Wraith/loopwright",
   "license": "MIT",
   "keywords": ["scaffold", "autonomous-agent", "pm-loop", "harness", "skill"],
   "defaultEnabled": true
